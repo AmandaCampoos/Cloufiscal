@@ -2,6 +2,23 @@
 
 Avaliação das quarta, quinta e sexta sprints do programa de bolsas Compass UOL para formação em Inteligência Artificial para AWS.
 
+## Metas:
+
+- Ir atualizando o READ.ME
+  - Etapas
+    - Reuniões e organização
+  - Uso
+  - Dificuldades
+  - Autores(com fotos de preferencia)
+- Lembrar:
+  - Emojis nos commits.
+  - Cada tecnologia diferente ter seu READ.ME.
+  - Melhorar em comparação ao anterior.
+  - Adicionar imagens a medida do possível.
+  - Utilizar HTML para melhorar a aparencia.
+- To-do
+  - Adicionar indice ao READ.ME
+
 ***
 
 ## Execução (Código Fonte)
