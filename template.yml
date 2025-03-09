@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  MeuBucketS3:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: grupo-07  # Defina o nome do seu bucket S3
+
+  MinhaApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: "api-nf-grupo07"  # Nome personalizado da API Gateway
+      StageName: "Prod"
+
+  MyLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      CodeUri: .
+      Events:
+        UploadInvoice:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MinhaApiGateway
+            Path: /api/v1/invoice
+            Method: POST
+
+Outputs:
+  ApiGatewayInvokeURL:
+    Description: "URL para chamar a API Gateway"
+    Value: !Sub "https://${MinhaApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/api/v1/invoice"
+
+  S3BucketName:
+    Description: "Nome do bucket S3"
+    Value: !Ref MeuBucketS3
