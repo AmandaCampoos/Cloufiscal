@@ -1,15 +1,15 @@
-import boto3
 import json
-import logging
-
-# Configuração do Logger
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
+import routes
 
 def lambda_handler(event, context):
-    """Função temporária apenas para teste da API"""
-    return {
-        'statusCode': 200,
-        'body': json.dumps({"message": "Lambda ativa, mas upload desativado no momento."})
-    }
+    """Gerencia as requisições HTTP e direciona para as rotas corretas."""
+    method = event.get("httpMethod", "")
+    path = event.get("path", "")
+    route_key = f"{method} {path}"
+
+    handler = routes.routes.get(route_key, None)
+    
+    if handler:
+        return handler(event)
+    else:
+        return {"statusCode": 404, "body": json.dumps({"erro": "Rota não encontrada"})}
