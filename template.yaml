@@ -1,0 +1,153 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  # 🌐 API Gateway para Upload de Notas Fiscais
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      BinaryMediaTypes:
+        - "multipart/form-data"
+
+  # 🖥 Lambda para Upload de Notas Fiscais
+  InvoiceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      CodeUri: hello_world
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+        - S3CrudPolicy:
+            BucketName: minhas-notas-fiscais
+      Environment:
+        Variables:
+          BUCKET_NAME: minhas-notas-fiscais
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/invoice
+            Method: POST
+            RestApiId: !Ref Api
+
+  # 🪳 Bucket para armazenar as notas fiscais
+  MinhasNotasFiscaisBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: minhas-notas-fiscais
+
+  # 🛡️ IAM Role para a Lambda Textract
+  LambdaTextractRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: TextractS3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub "arn:aws:s3:::minhas-notas-fiscais/*"
+              - Effect: Allow
+                Action:
+                  - textract:AnalyzeDocument
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                Resource: !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:LambdaNLTK"
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+
+  # 🖥 Lambda Textract - Processa OCR e chama a Lambda NLTK
+  LambdaTextract:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      CodeUri: lambda_textract
+      MemorySize: 512
+      Timeout: 60
+      Role: !GetAtt LambdaTextractRole.Arn
+      Environment:
+        Variables:
+          NEXT_LAMBDA: !Ref LambdaNLTK
+      Events:
+        S3Trigger:
+          Type: S3
+          Properties:
+            Bucket: !Ref MinhasNotasFiscaisBucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: processado/
+
+  # 🛡️ IAM Role para a Lambda NLTK
+  LambdaNLTKRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LogPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+        - PolicyName: S3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub "arn:aws:s3:::minhas-notas-fiscais/*"
+
+  # 🖥 Lambda NLTK - Estrutura os dados extraídos do Textract
+  LambdaNLTK:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: LambdaNLTK  # Nome fixo para evitar recriação
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      CodeUri: lambda_nltk
+      MemorySize: 512
+      Timeout: 60
+      Role: !GetAtt LambdaNLTKRole.Arn
+    #  Layers:
+     #   - arn:aws:lambda:us-east-1:539247489545:layer:nltk-layer:2  # ARN da camada NLTK
+
+Outputs:
+  # 🔗 URL para chamar a API Gateway
+  ApiGatewayInvokeURL:
+    Description: "URL para chamar a API Gateway"
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com/dev/api/v1/invoice"
