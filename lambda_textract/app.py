@@ -10,8 +10,9 @@ lambda_client = boto3.client('lambda')
 def lambda_handler(event, context):
     try:
         # 🔍 Obtém informações do evento do S3
-        s3_bucket = event['Records'][0]['s3']['bucket']['name']
-        s3_key = event['Records'][0]['s3']['object']['key']
+        record = event['Records'][0]
+        s3_bucket = record['s3']['bucket']['name']
+        s3_key = record['s3']['object']['key']
 
         print(f"📥 Recebendo arquivo: s3://{s3_bucket}/{s3_key}")
 
@@ -23,7 +24,7 @@ def lambda_handler(event, context):
 
         # 📄 Extrai e formata a resposta como JSON
         extracted_text = json.dumps(response, indent=4)
-        
+
         # 📂 Define o nome do arquivo de saída no S3
         output_key = s3_key.replace("NFs/", "processado/").rsplit(".", 1)[0] + ".json"
 
@@ -37,11 +38,11 @@ def lambda_handler(event, context):
             ContentType="application/json"
         )
 
-        # 🔗 Chama a próxima Lambda (SpaCy) se existir
-        next_lambda = os.environ.get('NEXT_LAMBDA', '').strip()
+        # 🔗 Chama a próxima Lambda (NLP com NLTK), se configurada
+        next_lambda = os.environ.get('NEXT_LAMBDA_NLTK', '').strip()
         if next_lambda:
             try:
-                print(f"🔄 Invocando Lambda: {next_lambda}")
+                print(f"🔄 Invocando Lambda NLP: {next_lambda}")
                 lambda_client.invoke(
                     FunctionName=next_lambda,
                     InvocationType='Event',
@@ -50,7 +51,7 @@ def lambda_handler(event, context):
             except Exception as e:
                 print(f"⚠️ Erro ao chamar Lambda {next_lambda}: {str(e)}")
         else:
-            print("⚠️ NEXT_LAMBDA não definido, pulando chamada.")
+            print("⚠️ NEXT_LAMBDA_NLTK não definido, pulando chamada.")
 
         return {'statusCode': 200, 'body': f'Textract processado e salvo em {output_key}'}
 
