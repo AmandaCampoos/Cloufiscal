@@ -22,8 +22,17 @@ def lambda_handler(event, context):
             FeatureTypes=['TABLES', 'FORMS']
         )
 
-        # 📄 Extrai e formata a resposta como JSON
-        extracted_text = json.dumps(response, indent=4)
+        # 📄 Extrai e organiza os textos por tipo
+        extracted_data = {
+            "lines": [],
+            "words": []
+        }
+        
+        for block in response.get("Blocks", []):
+            if block["BlockType"] == "LINE":
+                extracted_data["lines"].append(block["Text"])
+            elif block["BlockType"] == "WORD":
+                extracted_data["words"].append(block["Text"])
 
         # 📂 Define o nome do arquivo de saída no S3
         output_key = s3_key.replace("NFs/", "processado/").rsplit(".", 1)[0] + ".json"
@@ -34,7 +43,7 @@ def lambda_handler(event, context):
         s3.put_object(
             Bucket=s3_bucket,
             Key=output_key,
-            Body=extracted_text,
+            Body=json.dumps(extracted_data, indent=4),
             ContentType="application/json"
         )
 
