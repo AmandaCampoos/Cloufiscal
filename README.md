@@ -3,7 +3,7 @@
 # 📌 CLOUDFISCAL - Processamento de Notas Fiscais
 
 <div align="center">
-  <img src="assets/CloudFiscal.jpg" alt="CloudFiscal" width="150" height="150" style="border-radius: 50%;">
+  <img src="assets/CloudFiscal.png" alt="CloudFiscal" width="200" height="200">
 </div>
 
 ## Visão Geral
@@ -25,13 +25,12 @@ Este projeto é um sistema automatizado para processamento de notas fiscais, uti
 
 ## 📖 Índice
 
-1. [🚀 Tecnologias Utilizadas](#-tecnologias-utilizadas) 
-2. [🛠️ Arquitetura](#-arquitetura) 
-3. [🌍 Endpoints da API ](#-endpoints-da-api)
-4. [🔬 Testes locais](#-testes-locais)
-5. [📦 Deployment](#-deployment)
-6. [📝 Atribuições de Tarefas](#-atribuições-de-tarefas)  
-7. [👨‍💻 Autores](#-autores)
+1. [🚀 Tecnologias Utilizadas](#-tecnologias-utilizadas)
+2. [📝 Requisitos](#-requisitos) 
+3. [🔬 Testes locais](#-testes-locais)
+4. [📦 Deployment](#-deployment)
+5. [📝 Atribuições de Tarefas](#-atribuições-de-tarefas)  
+6. [👨‍💻 Autores](#-autores)
 
 ---
 
@@ -61,19 +60,9 @@ Este projeto é um sistema automatizado para processamento de notas fiscais, uti
 - Postman - Para testes locais
 
 ---
-## 🌍 Endpoints da API
 
-### 1. Upload de Nota Fiscal
-
-- **Método**: POST
-- **Endpoint**: `/api/v1/invoice`
-- **Descrição**: Envia uma nota fiscal para processamento.
-
-
----
 ## 📝 Requisitos
 
--
 
 ## 🔬 Testes Locais
 
@@ -94,27 +83,41 @@ Para implantar a aplicação na AWS:
 
 ```sh
 sam build
-saM deploy --guided
+saM deploy --guided --profile Nome-de-Usuário
 
 ```
-## 📝 Atribuições de Tarefas
 
-- Roberta: Desenvolvimento da API REST e integração com o Bucket S3, utilizando AWS SAM
-- Amanda: Implementação do Textract e utilização do SpaCy para processamento de dados
-- Bernardo: Desenvolvimento e integração do modelo de LLM (Large Language Model)
+## 📝 Responsabilidades da equipe:
 
+- Roberta: Desenvolvimento da API REST e integração com o S3 utilizando AWS SAM.
+
+- Amanda: Implementação do Textract e uso do NLTK para processamento de dados.
+
+- Bernardo: Desenvolvimento e integração do modelo de LLM (Large Language Model).
+
+ 
 ## 🤝 Autores  
 
-👩‍💻 **Amanda Campos Ximenes**  
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/AmandaX.png" alt="Amanda Campos" width="120" height="120">
+      <br>
+      <a href="https://github.com/AmandaCampoos">Amanda Campos</a>
+    </td>
+    <td align="center">
+      <img src="assets/BernardoA.png" alt="Bernardo Alonso" width="120" height="120" style="border-radius: 10px;">
+      <br>
+      <a href="https://github.com/Bernardo-rar">Bernardo Alonso</a>
+    </td>
+    <td align="center">
+      <img src="assets/RobertaO.png" alt="Roberta Oliveira" width="120" height="120">
+      <br>
+      <a href="https://github.com/Bernardo-rar">Roberta Oliveira</a>
+    </td>
+  </tr>
+</table>
 
-👨‍💻 **Bernardo Ramos Alonso Ribeiro**
-
-👩‍💻 **Roberta Kamilly Magalhães de Oliveira**  
-
-<div align="center">
-  <img src="assets/AmandaX.jpg" alt="Amanda Campos Ximenes" width="100" height="130" style="border-radius: 50%;">
-  <img src="assets/Bernado.png" alt="Bernardo Ramos Alonso Ribeiro" width="100" height="130"style="border-radius: 50%;">
-  <img src="assets/RobertaO.jpg" alt="Roberta Kamilly Magalhães de Oliveira" width="100" height="130" style="border-radius: 50%;">
-</div>
+ 
 
 </div>
