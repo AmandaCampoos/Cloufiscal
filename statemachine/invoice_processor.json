@@ -1,0 +1,22 @@
+{
+    "Comment": "Step Function para processar notas fiscais",
+    "StartAt": "ExtrairDadosTextract",
+    "States": {
+      "ExtrairDadosTextract": {
+        "Type": "Task",
+        "Resource": "arn:aws:lambda:us-east-1:664418962068:function:sam-app-LambdaTextract-abD4rnnQEnoA",
+        "Next": "AnalisarDadosNLTK",
+        "ResultPath": "$.textract_output"
+      },
+      "AnalisarDadosNLTK": {
+        "Type": "Task",
+        "Resource": "arn:aws:lambda:us-east-1:664418962068:function:LambdaNLTK",
+        "Parameters": {
+          "s3_key.$": "$.textract_output.s3_key",
+          "s3_bucket.$": "$.s3_bucket"
+        },
+        "End": true
+      }
+    }
+  }
+  
