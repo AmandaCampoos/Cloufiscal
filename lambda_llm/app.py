@@ -4,9 +4,11 @@ import os
 import boto3
 
 # Configuração da API Groq
-GROQ_API_KEY = ""
+GROQ_API_KEY = ""  # Defina essa variável no ambiente
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
+
+
 
 
 def call_groq_api():
@@ -47,7 +49,7 @@ def call_groq_api():
         print("Status Code:", response.status_code)
         print("Headers:", response.headers)
 
-        return response.text  # Mostra a resposta completa como string
+        return response.json()  # Mostra a resposta completa como string
     
         data = response.json()
 
@@ -74,12 +76,13 @@ def lambda_handler(event, context):
 
         # Processa a nota fiscal com a API Groq
         nota_corrigida = call_groq_api()
+        json_response = nota_corrigida.get("choices", [{}])[0].get("message", {}).get("content", "")
 
-        print("Nota Fiscal Corrigida:", nota_corrigida)
+        print("Nota Fiscal Corrigida:", json_response)
 
         return {
             "status": "sucesso",
-            "nota_corrigida": nota_corrigida
+            "nota_corrigida": json_response
         }
     except Exception as e:
         print(f"Erro: {str(e)}")
