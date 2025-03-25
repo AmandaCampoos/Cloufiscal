@@ -1,5 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+# lembrar de mudar o nome das buckets para a que cada um usa!
 
 Resources:
   # API Gateway para Upload de Notas Fiscais
@@ -197,6 +198,50 @@ Resources:
                   - s3:GetObject
                   - s3:PutObject
                 Resource: !Sub "arn:aws:s3:::notas-fiscais-07/*"
+
+  LambdaLLMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LogPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+        - PolicyName: S3AccessPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource: !Sub "arn:aws:s3:::minhas-notas-fiscaiss/*"
+
+# 🖥 Lambda LLM - Envia os dados para a API de uma LLM e armazena o resultado
+  LambdaLLM:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: LambdaLLM
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      CodeUri: lambda_llm
+      MemorySize: 512
+      Timeout: 60
+      Role: !GetAtt LambdaLLMRole.Arn
+
 
 Outputs:
   # 📌 URL para chamar a API Gateway
