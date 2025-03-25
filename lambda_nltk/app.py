@@ -1,4 +1,4 @@
-import os
+import os 
 import json
 import re
 import boto3
@@ -30,13 +30,15 @@ def lambda_handler(event, context):
     input_prefix = "processado/"
     output_prefix = "estruturados/"
 
-    # Identifica a origem do evento
-    input_key = event.get("s3_key") or (event.get("Records", [{}])[0].get("s3", {}).get("object", {}).get("key"))
+    # ✅ Pegando o nome do arquivo corretamente
+    input_key = event.get("file")  
+
     if not input_key:
         return {"statusCode": 400, "error": "Nenhum arquivo foi encontrado no evento."}
 
-    if not input_key.startswith(input_prefix):
-        return {"statusCode": 400, "error": f"O arquivo {input_key} não está no diretório esperado."}
+    # 🚨 Verifica se o arquivo está no diretório correto
+    if "processado/" not in input_key:
+        return {"statusCode": 400, "error": f"Arquivo processado não encontrado! Esperado em '{input_prefix}', mas veio '{input_key}'."}
 
     output_key = input_key.replace(input_prefix, output_prefix).replace(".json", "-structured.json")
 
