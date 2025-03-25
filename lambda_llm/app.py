@@ -17,7 +17,7 @@ def call_groq_api():
         raise ValueError("API Key da Groq não encontrada. Defina a variável de ambiente GROQ_API_KEY.")
 
     prompt = f"""Tente completar da melhor maneira possível a seguinte nota fiscal:
-    Caso o campo esteja vazio(null), substitua por None. 
+    Caso o campo esteja vazio(null), substitua por "None"(com aspas para manter o formato json). 
     Retorne apenas a nota fiscal já corrigida sem mensagens extras, em formato JSON válido, use aspas duplas.
 
     
@@ -72,11 +72,36 @@ def lambda_handler(event, context):
         #if not nota_fiscal:
             #raise ValueError("Nenhuma nota fiscal fornecida no evento.")
 
+
         #print("Nota Fiscal Recebida:", json.dumps(nota_fiscal, indent=2))
 
         # Processa a nota fiscal com a API Groq
         nota_corrigida = call_groq_api()
-        json_response = nota_corrigida.get("choices", [{}])[0].get("message", {}).get("content", "")
+        #json_response = nota_corrigida.get("choices", [{}])[0].get("message", {}).get("content", "")
+        print("Tentativa content")
+        content = nota_corrigida.get("choices", [{}])[0].get("message", {}).get("content", {})
+
+        # Verificando se o conteúdo é uma string JSON válida e transformando-a em um dicionário
+
+    # Remover a palavra 'json' e os backticks
+        content = content.replace("json", "").strip('`').strip()
+        content = content.strip() #tirando espaços em branco
+
+        print(content)
+        print(type(content))
+        print("Tipo do content")
+
+        if content:
+            try:
+                # Transformando a string JSON em um dicionário
+                json_response = json.loads(content)
+            except json.JSONDecodeError:
+                print("Erro ao decodificar o JSON. Retornando um dicionário vazio.")
+                json_response = {}  # Se não for possível decodificar, retorna um dict vazio
+        else:
+            json_response = {}
+        print(type(json_response))
+        print(json_response)
 
         print("Nota Fiscal Corrigida:", json_response)
 
