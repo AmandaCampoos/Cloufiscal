@@ -1,2 +1,3 @@
 # Diretório de build do SAM
 .aws-sam/
+samconfig.toml
