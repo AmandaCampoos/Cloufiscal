@@ -13,7 +13,7 @@ MODEL = "llama-3.3-70b-versatile"
 
 def verificar_forma_pgto(json_response):
     if json_response['forma_pgto'].lower() in ['dinheiro', 'pix']:
-        return 'dinheiro/pix'
+        return 'dinheiro'
     else:
         return 'outros'
 
