@@ -6,7 +6,7 @@ import boto3
 #refatorar fuunções depois
 
 # Configuração da API Groq
-GROQ_API_KEY = ""  # Defina essa variável no ambiente
+GROQ_API_KEY = "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"  # Defina essa variável no ambiente
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
 
@@ -16,6 +16,24 @@ def verificar_forma_pgto(json_response):
         return 'dinheiro/pix'
     else:
         return 'outros'
+
+def parse_json(content):
+
+    if content:
+        content = content.get("choices", [{}])[0].get("message", {}).get("content", {})
+
+        # Verificando se o conteúdo é uma string JSON válida e transformando-a em um dicionário
+
+        # Remover a palavra 'json' e os backticks
+        content = content.replace("json", "").strip('`').strip()
+        content = content.strip()
+        try:
+            # Transformando a string JSON em um dicionário
+            return json.loads(content)
+        except json.JSONDecodeError:
+            print("Erro ao decodificar o JSON. Retornando um dicionário vazio.")
+            return {}  # Se não for possível decodificar, retorna um dict vazio
+    return {}
 
 
 def call_groq_api():
@@ -87,29 +105,7 @@ def lambda_handler(event, context):
         nota_corrigida = call_groq_api()
         #json_response = nota_corrigida.get("choices", [{}])[0].get("message", {}).get("content", "")
         print("Tentativa content")
-        content = nota_corrigida.get("choices", [{}])[0].get("message", {}).get("content", {})
-
-        # Verificando se o conteúdo é uma string JSON válida e transformando-a em um dicionário
-
-    # Remover a palavra 'json' e os backticks
-        content = content.replace("json", "").strip('`').strip()
-        content = content.strip() #tirando espaços em branco
-
-        print(content)
-        print(type(content))
-        print("Tipo do content")
-
-        if content:
-            try:
-                # Transformando a string JSON em um dicionário
-                json_response = json.loads(content)
-            except json.JSONDecodeError:
-                print("Erro ao decodificar o JSON. Retornando um dicionário vazio.")
-                json_response = {}  # Se não for possível decodificar, retorna um dict vazio
-        else:
-            json_response = {}
-        print(type(json_response))
-        print(json_response)
+        json_response = parse_json(nota_corrigida)
 
 
         # Verificar a forma de pagamento
@@ -120,7 +116,8 @@ def lambda_handler(event, context):
 
         return {
             "status": "sucesso",
-            "nota_corrigida": json_response
+            "nota_corrigida": json_response,
+            "forma_pgto": forma_pgto
         }
     except Exception as e:
         print(f"Erro: {str(e)}")
