@@ -27,9 +27,10 @@ Este projeto é um sistema automatizado para processamento de notas fiscais, uti
 
 1. [🚀 Tecnologias Utilizadas](#-tecnologias-utilizadas)
 2. [📝 Requisitos](#-requisitos) 
+3. [🛠️ Arquitetura e Funcionalidades](#-arquitetura-e-funcionalidade)
 3. [🔬 Testes locais](#-testes-locais)
 4. [📦 Deployment](#-deployment)
-5. [📝 Atribuições de Tarefas](#-atribuições-de-tarefas)  
+5. [📝 Responsabilidades da equipe](#-responsabilidades-da-equipe)  
 6. [👨‍💻 Autores](#-autores)
 
 ---
@@ -62,7 +63,49 @@ Este projeto é um sistema automatizado para processamento de notas fiscais, uti
 ---
 
 ## 📝 Requisitos
+Para executar o projeto localmente, você precisará:
 
+- Python 3.12 instalado
+
+- AWS CLI configurado
+
+- AWS SAM instalado
+
+- Docker instalado para testes locais das Lambdas
+
+- Postman ou outra ferramenta para testar os endpoints
+
+- Conta AWS com permissões para Lambda, S3, API Gateway e Textract
+
+## 🛠️ Arquitetura e Funcionalidades
+
+### 🔄 Fluxo de Processamento
+
+###  Lambda 1 - `InvoiceFunction`:
+
+- Responsável por interagir com o CloudWatch e utilizar variáveis de ambiente.
+- Define as rotas e invoca a API Gateway.
+- Faz o upload da nota fiscal para o bucket S3 na pasta `NFS/`.
+- Inicia o Step Function para orquestrar o fluxo de trabalho.
+
+### Lambda 2 - `LambdaTextract`:
+
+- Processa imagens das notas fiscais (PNG ou JPG, uma por vez).
+- Utiliza o serviço Amazon Textract para ler o texto da imagem e extrair os dados estruturados.
+- Processa as informações extraídas e as devolve no formato JSON.
+- Ao final, chama a próxima função Lambda, `lambda_NLTK`, para continuar o processamento.
+
+### Lambda 3 - `LambdaNLTK`:
+
+- Utiliza a biblioteca NLTK (Natural Language Toolkit) para processamento de texto.
+- Faz uso de Layers contendo as dependências do NLTK e configura o caminho para essas layers.
+- A função lambda_handler acessa o bucket S3 de entrada (pasta "processado") e de saída (pasta "estruturados").
+- Organiza e processa os dados extraídos pela função anterior, baixa o arquivo JSON do S3 e salva a versão estruturada no mesmo bucket.
+- Retorna um status code indicando o sucesso ou falha do processo.
+
+### Lambda 4 - `LambdaLLM`:
+- 
+ -
 
 ## 🔬 Testes Locais
 
@@ -113,7 +156,7 @@ saM deploy --guided --profile Nome-de-Usuário
     <td align="center">
       <img src="assets/RobertaO.png" alt="Roberta Oliveira" width="120" height="120">
       <br>
-      <a href="https://github.com/Bernardo-rar">Roberta Oliveira</a>
+      <a href="https://github.com/RobertakOliveira">Roberta Oliveira</a>
     </td>
   </tr>
 </table>
