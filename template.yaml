@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-# lembrar de mudar o nome das buckets para a que cada um usa!
+# lembrar de mudar o nome das buckets para a que cada um usa!!!
 
 Resources:
   # API Gateway para Upload de Notas Fiscais
@@ -27,10 +27,10 @@ Resources:
       Timeout: 30
       Policies:
         - S3CrudPolicy:
-            BucketName: notas-fiscais-07
+            BucketName: minhas-notas-fiscaiss
       Environment:
         Variables:
-          BUCKET_NAME: notas-fiscais-07
+          BUCKET_NAME: minhas-notas-fiscaiss
           STEP_FUNCTION_ARN: !Ref InvoiceProcessorStateMachine  
       Events:
         Api:
@@ -44,7 +44,7 @@ Resources:
   MinhasNotasFiscaisBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: notas-fiscais-07
+      BucketName: minhas-notas-fiscaiss
 
   # 📌 Step Function para processar notas fiscais
   InvoiceProcessorStateMachine:
@@ -64,6 +64,11 @@ Resources:
             "AnalisarDadosNLTK": {
               "Type": "Task",
               "Resource": "${LambdaNLTK.Arn}",
+              "Next": "ProcessarComLLM"
+            },
+            "ProcessarComLLM": {
+              "Type": "Task",
+              "Resource": "${LambdaLLM.Arn}",
               "End": true
             }
           }
@@ -92,6 +97,7 @@ Resources:
                 Resource: 
                   - !GetAtt LambdaTextract.Arn
                   - !GetAtt LambdaNLTK.Arn
+                  - !GetAtt LambdaLLM.Arn
 
   # 📌 Lambda Textract - Processa OCR e chama a Lambda NLTK
   LambdaTextract:
@@ -106,7 +112,7 @@ Resources:
       Environment:
         Variables:
           NEXT_LAMBDA_NLTK: !Ref LambdaNLTK
-          BUCKET_NAME: notas-fiscais-07
+          BUCKET_NAME: minhas-notas-fiscaiss
       Events:
         S3Event:
           Type: S3
@@ -139,7 +145,7 @@ Resources:
                 Action:
                   - s3:GetObject
                   - s3:PutObject
-                Resource: !Sub "arn:aws:s3:::notas-fiscais-07/*"
+                Resource: !Sub "arn:aws:s3:::minhas-notas-fiscaiss/*"
               - Effect: Allow
                 Action:
                   - textract:AnalyzeDocument
@@ -197,7 +203,7 @@ Resources:
                 Action:
                   - s3:GetObject
                   - s3:PutObject
-                Resource: !Sub "arn:aws:s3:::notas-fiscais-07/*"
+                Resource: !Sub "arn:aws:s3:::minhas-notas-fiscaiss/*"
 
   LambdaLLMRole:
     Type: AWS::IAM::Role
