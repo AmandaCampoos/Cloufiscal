@@ -36,7 +36,7 @@ def parse_json(content):
     return {}
 
 
-def call_groq_api():
+def call_groq_api(nota_fiscal):
     """Envia a nota fiscal para a API da Groq e retorna a resposta corrigida."""
     if not GROQ_API_KEY:
         raise ValueError("API Key da Groq não encontrada. Defina a variável de ambiente GROQ_API_KEY.")
@@ -47,17 +47,7 @@ def call_groq_api():
     Retorne apenas a nota fiscal já corrigida sem mensagens extras, em formato JSON válido, use aspas duplas.
 
     
-    "nome_emissor": "Pedro da Silva",
-    "CNPJ_emissor": "00.000.000/0000-0a",
-    "endereco_emissor": "",
-    "CNPJ_CPF_consumidor": "000.000.0a0-00",
-    "data_emissao": "00/00/0000",
-    "numero_nota_fiscal": "",
-    "serie_nota_fiscal": "",
-    "valor_total": "0000.00",
-    "forma_pgto": "dinheiro"
-    
-    """
+    """ + nota_fiscal
 
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
@@ -93,18 +83,23 @@ def call_groq_api():
 def lambda_handler(event, context):
     """Função principal da Lambda para teste."""
     try:
-        # JSON de teste passado na própria requisição
-        #nota_fiscal = event.get("nota_fiscal")
-        #if not nota_fiscal:
-            #raise ValueError("Nenhuma nota fiscal fornecida no evento.")
+        structured_data = event.get("data", {})  # Dados estruturados da nota fiscal
+        #structured_data = event
+        print("Dados Estruturados:", json.dumps(structured_data, indent=2))
+        json_dados = json.dumps(structured_data, indent=2)
 
-
-        #print("Nota Fiscal Recebida:", json.dumps(nota_fiscal, indent=2))
+        if structured_data:
+            print("Dados estruturados recebidos:", structured_data)
+        else:
+            return {
+                "statuscode": "400",
+                "detalhes": "Nenhum dado estruturado recebido."
+            }
+    
 
         # Processa a nota fiscal com a API Groq
-        nota_corrigida = call_groq_api()
-        #json_response = nota_corrigida.get("choices", [{}])[0].get("message", {}).get("content", "")
-        print("Tentativa content")
+        nota_corrigida = call_groq_api(json_dados)
+        
         json_response = parse_json(nota_corrigida)
 
 
