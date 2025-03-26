@@ -131,13 +131,13 @@ def lambda_handler(event, context):
 
 
         return {
-            "status": "sucesso",
+            "statuscode": "200",
             "nota_corrigida": json_response,
             "forma_pgto": forma_pgto
         }
     except Exception as e:
         print(f"Erro: {str(e)}")
         return {
-            "status": "erro",
+            "statuscode": "400",
             "detalhes": str(e)
         }
