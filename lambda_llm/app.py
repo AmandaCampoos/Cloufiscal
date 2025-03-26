@@ -55,7 +55,7 @@ def call_groq_api():
     "numero_nota_fiscal": "",
     "serie_nota_fiscal": "",
     "valor_total": "0000.00",
-    "forma_pgto": "<dinheiropix/outros>"
+    "forma_pgto": "dinheiro"
     
     """
 
@@ -117,8 +117,9 @@ def lambda_handler(event, context):
         input_prefix = "estruturados/"
         output_prefix = "finalizados/"
 
-        pasta = "finalizados/outros"
-        nome_arquivo = "nfteste.json"
+        forma_pgto = verificar_forma_pgto(json_response)
+        pasta = f"finalizados/{forma_pgto}"
+        nome_arquivo = "nftesteDin.json"
 
         # Criando o caminho dinâmico
         output_key = f"{pasta}/{nome_arquivo}"
