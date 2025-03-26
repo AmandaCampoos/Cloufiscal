@@ -83,7 +83,12 @@ def call_groq_api(nota_fiscal):
 def lambda_handler(event, context):
     """Função principal da Lambda para teste."""
     try:
-        structured_data = event.get("data", {})  # Dados estruturados da nota fiscal
+
+        # Se o JSON tiver a chave "data", usa ela; senão, assume que o próprio JSON já é a nota fiscal.
+        # Util para fins de testes locais
+        structured_data = event.get("data", event) # Testar ambos os casos
+
+        #structured_data = event.get("data", {})  # Dados estruturados da nota fiscal
         #structured_data = event
         print("Dados Estruturados:", json.dumps(structured_data, indent=2))
         json_dados = json.dumps(structured_data, indent=2)
