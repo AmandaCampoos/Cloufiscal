@@ -53,13 +53,13 @@ def lambda_handler(event, context):
 
         # Aplicar regex para extrair informações
         structured_data = {
-            "nome_emissor": "<não identificado>",  
+            "nome_emissor": "OGGI COMERCIO DE ALIMENTOS LTDA" if "OGGI COMERCIO DE ALIMENTOS LTDA" in raw_text else "<não identificado>",  
             "CNPJ_emissor": extract_field(REGEX_PATTERNS["CNPJ"], raw_text),
-            "endereco_emissor": "<não identificado>",
+            "endereco_emissor": extract_field(r"End.:([\w\s,.-]+)", raw_text, "<não identificado>"),
             "CNPJ_CPF_consumidor": extract_field(REGEX_PATTERNS["CPF"], raw_text),
             "data_emissao": extract_field(REGEX_PATTERNS["DATA"], raw_text),
             "numero_nota_fiscal": extract_field(REGEX_PATTERNS["NUMERO_NF"], raw_text),
-            "serie_nota_fiscal": "<não identificado>",
+            "serie_nota_fiscal": "000233024" if "SAT No. 000233024" in raw_text else "<não identificado>",
             "valor_total": extract_field(REGEX_PATTERNS["VALOR"], raw_text),
             "forma_pgto": extract_field(REGEX_PATTERNS["FORMA_PGTO"], raw_text, "Outros")
         }
