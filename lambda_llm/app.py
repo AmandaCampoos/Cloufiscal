@@ -3,12 +3,19 @@ import requests
 import os
 import boto3
 
+#refatorar fuunções depois
+
 # Configuração da API Groq
 GROQ_API_KEY = ""  # Defina essa variável no ambiente
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
 
 
+def verificar_forma_pgto(json_response):
+    if json_response['forma_pgto'].lower() in ['dinheiro', 'pix']:
+        return 'dinheiro/pix'
+    else:
+        return 'outros'
 
 
 def call_groq_api():
@@ -16,7 +23,8 @@ def call_groq_api():
     if not GROQ_API_KEY:
         raise ValueError("API Key da Groq não encontrada. Defina a variável de ambiente GROQ_API_KEY.")
 
-    prompt = f"""Tente completar da melhor maneira possível a seguinte nota fiscal:
+    prompt = f"""Tente corrigir da melhor maneira possível a seguinte nota fiscal:
+    Não substitua ou mexa em campos que já estão preenchidos.
     Caso o campo esteja vazio(null), substitua por "None"(com aspas para manter o formato json). 
     Retorne apenas a nota fiscal já corrigida sem mensagens extras, em formato JSON válido, use aspas duplas.
 
@@ -102,6 +110,11 @@ def lambda_handler(event, context):
             json_response = {}
         print(type(json_response))
         print(json_response)
+
+
+        # Verificar a forma de pagamento
+        forma_pgto = verificar_forma_pgto(json_response)
+        #print(forma_pgto)
 
         print("Nota Fiscal Corrigida:", json_response)
 
