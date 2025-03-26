@@ -6,7 +6,7 @@ import boto3
 #refatorar fuunções depois
 
 # Configuração da API Groq
-GROQ_API_KEY = "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"  # Defina essa variável no ambiente
+GROQ_API_KEY = ""  # Defina essa variável no ambiente
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
 
@@ -112,7 +112,27 @@ def lambda_handler(event, context):
         forma_pgto = verificar_forma_pgto(json_response)
         #print(forma_pgto)
 
-        print("Nota Fiscal Corrigida:", json_response)
+        s3_client = boto3.client("s3")
+        bucket_name = "minhas-notas-fiscaiss"
+        input_prefix = "estruturados/"
+        output_prefix = "finalizados/"
+
+        pasta = "finalizados/outros"
+        nome_arquivo = "nfteste.json"
+
+        # Criando o caminho dinâmico
+        output_key = f"{pasta}/{nome_arquivo}"
+
+
+        s3_client.put_object(
+            Bucket=bucket_name,
+            Key=output_key,
+            Body=json.dumps(json_response, indent=4),
+            ContentType="application/json"
+        )
+
+
+
 
         return {
             "status": "sucesso",
