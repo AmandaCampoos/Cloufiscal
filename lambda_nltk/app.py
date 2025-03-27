@@ -20,15 +20,15 @@ REGEX_PATTERNS = {
     "FORMA_PGTO": r"\b(Pix|Dinheiro|Cartão|Boleto|Crédito|Débito)\b"
 }
 
-def extract_field(pattern, text, default="<não encontrado>"):
-    """Extrai um campo usando regex e retorna o primeiro valor encontrado."""
+def extract_field(pattern, text, default="None"):
+    """Extrai um campo usando regex e retorna o primeiro valor encontrado ou 'None'. """
     match = re.search(pattern, text, re.IGNORECASE)
     return match.group(0) if match else default
 
 def lambda_handler(event, context):
     bucket_name = "minhas-notas-fiscais"
     input_prefix = "processado/"
-    output_prefix = "estruturados/"
+    output_prefix = "estruturado/"
 
     # ✅ Pegando o nome do arquivo corretamente
     input_key = event.get("file")  
@@ -53,13 +53,13 @@ def lambda_handler(event, context):
 
         # Aplicar regex para extrair informações
         structured_data = {
-            "nome_emissor": "OGGI COMERCIO DE ALIMENTOS LTDA" if "OGGI COMERCIO DE ALIMENTOS LTDA" in raw_text else "<não identificado>",  
+            "nome_emissor": extract_field(r"([\w\s]+) LTDA", raw_text),  # Extraindo nome sem fixar "OGGI"
             "CNPJ_emissor": extract_field(REGEX_PATTERNS["CNPJ"], raw_text),
-            "endereco_emissor": extract_field(r"End.:([\w\s,.-]+)", raw_text, "<não identificado>"),
+            "endereco_emissor": extract_field(r"End.:([\w\s,.-]+)", raw_text),
             "CNPJ_CPF_consumidor": extract_field(REGEX_PATTERNS["CPF"], raw_text),
             "data_emissao": extract_field(REGEX_PATTERNS["DATA"], raw_text),
             "numero_nota_fiscal": extract_field(REGEX_PATTERNS["NUMERO_NF"], raw_text),
-            "serie_nota_fiscal": "000233024" if "SAT No. 000233024" in raw_text else "<não identificado>",
+            "serie_nota_fiscal": extract_field(r"SAT No. (\d+)", raw_text),
             "valor_total": extract_field(REGEX_PATTERNS["VALOR"], raw_text),
             "forma_pgto": extract_field(REGEX_PATTERNS["FORMA_PGTO"], raw_text, "Outros")
         }
