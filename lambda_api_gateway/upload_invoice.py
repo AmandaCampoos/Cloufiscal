@@ -74,7 +74,6 @@ def lambda_handler(event, context):
             )
 
             return {
-                    'notatratada': response,
                     'statusCode': 200,
                     "headers": {
                         "Access-Control-Allow-Origin": "*",
