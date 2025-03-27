@@ -1,4 +1,4 @@
-import boto3 
+import boto3
 import json
 import os
 
@@ -29,13 +29,31 @@ def lambda_handler(event, context):
         )
 
         # 📄 Organiza os textos extraídos
-        extracted_data = {"lines": [], "words": []}
+        extracted_data = {"lines": [], "words": [], "forms": {}, "tables": []}
         
         for block in response.get("Blocks", []):
             if block["BlockType"] == "LINE":
                 extracted_data["lines"].append(block["Text"])
             elif block["BlockType"] == "WORD":
                 extracted_data["words"].append(block["Text"])
+            elif block["BlockType"] == "KEY_VALUE_SET" and "Relationships" in block:
+                key = None
+                value = None
+                for rel in block["Relationships"]:
+                    if rel["Type"] == "CHILD":
+                        text = " ".join([b["Text"] for b in response["Blocks"] if b["Id"] in rel["Ids"]])
+                        if block["EntityTypes"][0] == "KEY":
+                            key = text
+                        else:
+                            value = text
+                if key and value:
+                    extracted_data["forms"][key] = value
+            elif block["BlockType"] == "TABLE":
+                extracted_data["tables"].append("Tabela identificada (detalhamento futuro)")
+
+        # 🔍 Filtragem de dados irrelevantes
+        filtered_lines = [line for line in extracted_data["lines"] if not any(ignore in line.lower() for ignore in ["qrcode", "tributos", "total aprox"])]
+        extracted_data["lines"] = filtered_lines
 
         # 📂 Define o nome do arquivo de saída no S3
         output_key = file_name.replace("NFs/", "processado/").rsplit(".", 1)[0] + ".json"
@@ -67,15 +85,14 @@ def lambda_handler(event, context):
         else:
             print("⚠️ NEXT_LAMBDA_NLTK não definido, pulando chamada.")
 
-            print("🎉 PROCESSAMENTO FINALIZADO COM SUCESSO! 🎉")
+        print("🎉 PROCESSAMENTO FINALIZADO COM SUCESSO! 🎉")
 
-# 🚀 Atualizando a saída da Lambda Textract
         return {
             'statusCode': 200,
             "bucket": bucket_name,
-            "file": output_key  
-          }
+            "file": output_key  # 🔥 Agora passamos o JSON, não o JPG!
+        }
 
     except Exception as e:
         print(f"\n❌ ERRO FATAL: {str(e)}\n")
-        return {'statusCode': 500, 'body': f'Erro ao processar arquivo: {str(e)}'} 
+        return {'statusCode': 500, 'body': f'Erro ao processar arquivo: {str(e)}'}
