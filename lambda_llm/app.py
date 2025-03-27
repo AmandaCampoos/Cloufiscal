@@ -67,12 +67,6 @@ def call_groq_api(nota_fiscal):
 
         return response.json()  # Mostra a resposta completa como string
     
-        data = response.json()
-
-        if "choices" not in data or not data["choices"]:
-            raise ValueError("Resposta da API Groq inválida: 'choices' ausente ou vazio.")
-
-        return json.loads(data["choices"][0]["message"]["content"])
 
     except requests.exceptions.RequestException as e:
         raise RuntimeError(f"Erro na requisição para a API Groq: {str(e)}")
