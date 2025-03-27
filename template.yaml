@@ -15,15 +15,15 @@ Resources:
         AllowCredentials: true
       BinaryMediaTypes:
         - "multipart/form-data"
-    NLTKLayer:
-      Type: AWS::Serverless::LayerVersion
-      Properties:
-        LayerName: NLTKLayer
-        Description: Layer contendo a biblioteca NLTK
-        ContentUri: layer/NLTK_layer.zip
-        CompatibleRuntimes:
-          - python3.12
-        RetentionPolicy: Delete
+  NLTKLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: NLTKLayer
+      Description: Layer contendo a biblioteca NLTK
+      ContentUri: layer/NLTK_layer.zip
+      CompatibleRuntimes:
+        - python3.12
+      RetentionPolicy: Delete
 
   # Lambda para Upload de Notas Fiscais
   InvoiceFunction:
@@ -37,6 +37,11 @@ Resources:
       Policies:
         - S3CrudPolicy:
             BucketName: minhas-notas-fiscaiss
+        - Statement:
+            Effect: Allow
+            Action: 
+              - states:StartExecution
+            Resource: !Ref InvoiceProcessorStateMachine
       Environment:
         Variables:
           BUCKET_NAME: minhas-notas-fiscaiss
@@ -178,6 +183,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.12
       CodeUri: lambda_nltk
+      Layers:
+        - !Ref NLTKLayer
       MemorySize: 512
       Timeout: 60
       Role: !GetAtt LambdaNLTKRole.Arn
