@@ -53,6 +53,8 @@ Este projeto é um sistema automatizado para processamento de notas fiscais, uti
 - API Gateway - Exposição de endpoints
 - Bucket S3 - Armazenamento do arquivos  
 - Textract - Extração de dados de notas fiscais
+- AWS Step Functions -
+- AWS CloudWatch - 
 
 ### 💻 **Ferramentas de Desenvolvimento**
 
@@ -146,17 +148,23 @@ saM deploy --guided --profile Nome-de-Usuário
     <td align="center">
       <img src="assets/AmandaX.png" alt="Amanda Campos" width="120" height="120">
       <br>
-      <a href="https://github.com/AmandaCampoos">Amanda Campos</a>
+      <a href="https://github.com/AmandaCampoos">Git Hub - Amanda Campos</a>
+      <br>
+      <a href="linkedin.com/in/amanda-ximenes-a02ab8266">Linkedin - Amanda Campos</a>
     </td>
     <td align="center">
-      <img src="assets/BernardoA.png" alt="Bernardo Alonso" width="120" height="120" style="border-radius: 10px;">
+      <img src="assets/BernardoA.png" alt="Bernardo Alonso" width="120" height="120">
       <br>
-      <a href="https://github.com/Bernardo-rar">Bernardo Alonso</a>
+      <a href="https://github.com/Bernardo-rar"> Git Hub - Bernardo Alonso</a>
+      <br>
+      <a href="https://github.com/Bernardo-rar"> Linkedin - Bernardo Alonso</a>
     </td>
     <td align="center">
       <img src="assets/RobertaO.png" alt="Roberta Oliveira" width="120" height="120">
       <br>
-      <a href="https://github.com/RobertakOliveira">Roberta Oliveira</a>
+      <a href="https://github.com/RobertakOliveira">Git Hub - Roberta Oliveira</a>
+      <br>
+      <a href="linkedin.com/in/roberta-oliveira-b9a0961a4">Linkedin - Roberta Oliveira</a>
     </td>
   </tr>
 </table>
