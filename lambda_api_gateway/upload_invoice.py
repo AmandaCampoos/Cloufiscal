@@ -68,7 +68,8 @@ def lambda_handler(event, context):
             # Faz upload do arquivo para o S3
             s3_client.put_object(Bucket=BUCKET_NAME, Key=s3_key, Body=file_content)
 
-           
+            time.sleep(3)  # Espera 3 segundos para garantir que o arquivo foi salvo
+
             # Inicia a Step Function passando o caminho do arquivo
             response = stepfunctions_client.start_execution(
                 stateMachineArn=STEP_FUNCTION_ARN,
