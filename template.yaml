@@ -15,6 +15,15 @@ Resources:
         AllowCredentials: true
       BinaryMediaTypes:
         - "multipart/form-data"
+    NLTKLayer:
+      Type: AWS::Serverless::LayerVersion
+      Properties:
+        LayerName: NLTKLayer
+        Description: Layer contendo a biblioteca NLTK
+        ContentUri: layer/NLTK_layer.zip
+        CompatibleRuntimes:
+          - python3.12
+        RetentionPolicy: Delete
 
   # Lambda para Upload de Notas Fiscais
   InvoiceFunction:
