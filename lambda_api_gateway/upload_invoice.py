@@ -75,8 +75,37 @@ def lambda_handler(event, context):
                 stateMachineArn=STEP_FUNCTION_ARN,
                input=json.dumps({ "bucket": BUCKET_NAME, "file": s3_key})
             )
+            print("Antes do arn")
+            execution_arn = response["executionArn"]
+            print("Conseguiu o execution arr")
+            timebreak = 0
+
+            # Aguarda a execução finalizar
+            while True:
+                execution_response = stepfunctions_client.describe_execution(executionArn=execution_arn)
+                
+                status = execution_response["status"]
+                
+                if status in ["SUCCEEDED", "FAILED", "TIMED_OUT", "ABORTED"]:
+                    break  # Sai do loop quando a execução terminar
+
+                timebreak+=1
+                if timebreak > 5:
+                    break # Para evitar loop infinito, sai após 5 iterações
+                time.sleep(3)  # Aguarda 3 segundos antes de tentar novamente
+
+            # Se a execução foi bem-sucedida, pega o resultado final
+            if status == "SUCCEEDED":
+                print("A Step Function foi concluída com sucesso!")
+                output = execution_response.get("output", "{}")  # Garante que não seja None
+                try:
+                    result = json.loads(output) if isinstance(output, str) else output  # Evita erro de tipo
+                except json.JSONDecodeError:
+                    result = {"error": "Falha ao decodificar resposta da Step Function"}
+            else:
+                print("A Step Function falhou:", status)
            
-        
+            print("Antes do return")
             return {
                     'statusCode': 200,
                     "headers": {
@@ -84,7 +113,8 @@ def lambda_handler(event, context):
                         "Access-Control-Allow-Methods": "POST, OPTIONS",
                         "Access-Control-Allow-Headers": "Content-Type"
                 },
-                    'body': json.dumps({"message": "Upload realizado com sucesso e Step Function iniciada!"})
+                    'body': json.dumps({"message": "Upload realizado com sucesso e Step Function iniciada!",
+                                       "data": result if status == "SUCCEEDED" else status})
             }
 
         return {
