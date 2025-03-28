@@ -87,20 +87,22 @@ def lambda_handler(event, context):
 
         # Se o JSON tiver a chave "data", usa ela; senão, assume que o próprio JSON já é a nota fiscal.
         # Util para fins de testes locais
-        structured_data = event.get("data", event) # Testar ambos os casos
-
+        print("📄 Começando o processamento da Lambda ")
+        structured_data = event.get("data", event) 
         archive_name = event.get("message", event)
+
+        print("✅ Dados do arquivo recuperados com sucesso")
+
         json_name = json.dumps(archive_name, indent=2)
 
-        print("Nome do arquivo:", archive_name)
-        print(type(archive_name))
         
         treated_name= treat_name(json_name) 
-        print("Nome tratado:", treated_name)
+
+        print("📄 Tratando e recuperando o nome do arquivo:", treated_name)
 
         #structured_data = event.get("data", {})  # Dados estruturados da nota fiscal
         #structured_data = event
-        print("Dados Estruturados:", json.dumps(structured_data, indent=2))
+        
         json_dados = json.dumps(structured_data, indent=2)
 
         if structured_data:
@@ -113,15 +115,20 @@ def lambda_handler(event, context):
     
 
         # Processa a nota fiscal com a API Groq
+        print("📥 Enviando a nota fiscal para a API Groq ")
         nota_corrigida = call_groq_api(json_dados)
         
+        print("✅ Nota fiscal corrigida com sucesso:", nota_corrigida)
+
         json_response = parse_json(nota_corrigida)
 
+        print("✅ JSON tranformado com sucesso:", json_response)
 
+        print("Verificando a forma de pagamento")
         # Verificar a forma de pagamento
         forma_pgto = verificar_forma_pgto(json_response)
         #print(forma_pgto)
-
+        print("📥 Começando processamento do S3")
         s3_client = boto3.client("s3")
         bucket_name = "minhas-notas-fiscaiss"
         input_prefix = "estruturados/"
@@ -129,7 +136,7 @@ def lambda_handler(event, context):
 
         forma_pgto = verificar_forma_pgto(json_response)
         pasta = f"finalizados/{forma_pgto}"
-        #nome_arquivo = "nftesteDin.json"
+        
 
         # Criando o caminho dinâmico
         output_key = f"{pasta}/{treated_name}"
@@ -143,7 +150,7 @@ def lambda_handler(event, context):
         )
 
 
-
+        print("✅ Processaamento finalizado com sucesso!")
 
         return {
             "statuscode": "200",
@@ -151,7 +158,7 @@ def lambda_handler(event, context):
             "forma_pgto": forma_pgto
         }
     except Exception as e:
-        print(f"Erro: {str(e)}")
+        print(f"⚠️ Erro: {str(e)}")
         return {
             "statuscode": "400",
             "detalhes": str(e)
