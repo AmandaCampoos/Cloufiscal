@@ -8,9 +8,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>📄 CLOUDFISCAL</h1>
+        <img src="/assets/CloudFiscal.jpg" alt="Logo CloudFiscal" class="logo">
+        <br>
         <label for="fileInput" class="file-label">Selecionar arquivo</label>
         <input type="file" id="fileInput" accept=".pdf,.jpg,.png">
+        <p id="fileName" class="file-name"></p> <!-- Nome do arquivo selecionado -->
         <button id="uploadBtn" onclick="uploadFile()">📤 Enviar</button>
         <p id="status"></p>
     </div>
