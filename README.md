@@ -169,12 +169,68 @@ saM deploy --guided --profile Nome-de-Usuário
 ## 💻 Print da Página
 
 <div align="center">
-  <img src="./assets/PrintPagina.png" alt="Pagina" width="400">
+  <img src="./assets/PrintPagina.png" alt="Pagina" width="650">
 </div>
 
 
 ## 📂 Estruturas de pastas
 
+```plaintext
+sprints-4-5-6-pb-aws-janeiro/
+│── .aws-sam/
+│   ├── build/
+│   ├── cache/
+│   ├── artifacts/
+│── assets/
+│   ├── images/
+│   ├── docs/
+│── dataset/
+│   ├── raw_data/
+│   ├── processed_data/
+│   ├── NFs.zip
+│── lambda_api_gateway/
+│   ├── upload_nf/
+│   │   ├── static/
+│   │   │   ├── css/
+│   │   │   │   ├── styles.css
+│   │   │   ├── js/
+│   │   │   │   ├── script.js
+│   │   ├── templates/
+│   │   │   ├── index.html
+│   │   ├── app.py
+│   │   ├── routes.py
+│   ├── upload_invoice/
+│   │   ├── handlers/
+│   │   ├── utils/
+│   │   ├── upload_invoice.py
+│── lambda_llm/
+│   ├── models/
+│   ├── utils/
+│   ├── app.py
+│   ├── requirements.txt
+│── lambda_nltk/
+│   ├── processors/
+│   ├── utils/
+│   ├── app.py
+│   ├── requirements.txt
+│── lambda_textract/
+│   ├── parsers/
+│   ├── utils/
+│   ├── app.py
+│   ├── requirements.txt
+│── layer/
+│   ├── nltk/
+│   │   ├── NLTK_layer.zip
+│── statemachine/
+│   ├── definitions/
+│   │   ├── invoice_processor.json
+│── .gitignore
+│── README.md
+│── requirements.txt
+│── samconfig.toml
+|── template.yaml
+
+```
  
 ## 🤝 Autores  
 
