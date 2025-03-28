@@ -9,6 +9,31 @@ document.getElementById("fileInput").addEventListener("change", function(event) 
     }
 });
 
+function displayData(data) {
+    const outputDiv = document.getElementById('output');
+    outputDiv.innerHTML = ''; // Limpa o conteúdo anterior
+    
+    if (!data.data.nota_corrigida) {
+        outputDiv.innerHTML = '<p>Dados inválidos.</p>';
+        return;
+    }
+    
+    const notaDiv = document.createElement('div');
+    notaDiv.innerHTML = '<h2>Nota Corrigida</h2>';
+    
+    for (const [chave, valor] of Object.entries(data.data.nota_corrigida)) {
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>${chave}:</strong> ${valor}`;
+        notaDiv.appendChild(p);
+    }
+    
+    const pagamentoP = document.createElement('p');
+    pagamentoP.innerHTML = `<strong>Forma de Pagamento:</strong> ${data.data.forma_de_pgto || 'Não informado'}`;
+    
+    outputDiv.appendChild(notaDiv);
+    outputDiv.appendChild(pagamentoP);
+}
+
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const status = document.getElementById('status');
@@ -56,6 +81,7 @@ async function uploadFile() {
         }
 
         console.log("📜 Detalhes da resposta:", result);
+        displayData(result);
     } catch (error) {
         status.textContent = `❌ ${error.message}`;
         status.style.color = "red";
