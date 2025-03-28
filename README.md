@@ -1,13 +1,15 @@
 <div align="justify">
 
-# 📌 CLOUDFISCAL - Processamento de Notas Fiscais
+# 🧾 CLOUDFISCAL - Processamento de Notas Fiscais
 
 <div align="center">
   <img src="assets/CloudFiscal.png" alt="CloudFiscal" width="200" height="200">
 </div>
 
-## Visão Geral
-Este projeto é um sistema automatizado para processamento de notas fiscais, utilizando AWS Lambda, API Gateway, S3, Textract, NLTK e Step Functions para orquestração do fluxo de trabalho. O objetivo é extrair e estruturar informações das notas fiscais enviadas pelos usuários.
+## 📌 Visão Geral
+Este projeto implementa um sistema automatizado para processamento de notas fiscais, utilizando serviços da AWS para extrair, processar e estruturar informações de forma eficiente. A arquitetura é baseada em AWS Lambda, API Gateway, S3, Textract, NLTK e Step Functions, garantindo escalabilidade e automação do fluxo de trabalho.
+
+O principal objetivo é extrair, processar e organizar os dados das notas fiscais enviadas pelos usuários, transformando-os em um formato estruturado para facilitar análises.
 
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
@@ -32,6 +34,8 @@ Este projeto é um sistema automatizado para processamento de notas fiscais, uti
 4. [📦 Deployment](#-deployment)
 5. [📝 Responsabilidades da equipe](#-responsabilidades-da-equipe)  
 6. [👨‍💻 Autores](#-autores)
+7. [📂 Estrutura de Pastas](#-estrutura-de-pastas)
+8. [💻 Print da Página](#-print-da-pagina)
 
 ---
 
@@ -53,8 +57,8 @@ Este projeto é um sistema automatizado para processamento de notas fiscais, uti
 - API Gateway - Exposição de endpoints
 - Bucket S3 - Armazenamento do arquivos  
 - Textract - Extração de dados de notas fiscais
-- AWS Step Functions -
-- AWS CloudWatch - 
+- AWS Step Functions - Orquestração do fluxo de processamento
+- AWS CloudWatch - Monitoramento e logs
 
 ### 💻 **Ferramentas de Desenvolvimento**
 
@@ -85,25 +89,46 @@ Para executar o projeto localmente, você precisará:
 
 ###  Lambda 1 - `InvoiceFunction`:
 
-- Responsável por interagir com o CloudWatch e utilizar variáveis de ambiente.
-- Define as rotas e invoca a API Gateway.
-- Faz o upload da nota fiscal para o bucket S3 na pasta `NFS/`.
-- Inicia o Step Function para orquestrar o fluxo de trabalho.
+##### Responsável por iniciar o fluxo de processamento e interagir com os serviços AWS:
+
+- Monitora eventos do CloudWatch e utiliza variáveis de ambiente para configuração.
+
+- Define as rotas da API e interage com o API Gateway.
+
+- Faz o upload da nota fiscal para o bucket S3, armazenando-a na pasta `NFs/`.
+
+- Inicia o Step Function, que gerencia a execução das próximas etapas do processo.
 
 ### Lambda 2 - `LambdaTextract`:
 
-- Processa imagens das notas fiscais (PNG ou JPG, uma por vez).
-- Utiliza o serviço Amazon Textract para ler o texto da imagem e extrair os dados estruturados.
-- Processa as informações extraídas e as devolve no formato JSON.
-- Ao final, chama a próxima função Lambda, `lambda_NLTK`, para continuar o processamento.
+##### Processa a nota fiscal utilizando OCR via Amazon Textract:
+
+- Acessa a nota fiscal armazenada no S3 na pasta `NFs/`.
+
+- Suporta múltiplos formatos de imagem para extração de dados.
+
+- Utiliza o Amazon Textract para converter o conteúdo da nota fiscal em texto, palavra por palavra.
+
+- Salva o resultado em JSON na pasta `processado/` do S3.
+
+- Ao concluir, aciona a próxima função `LambdaNLTK` para estruturar os dados extraídos.
 
 ### Lambda 3 - `LambdaNLTK`:
 
-- Utiliza a biblioteca NLTK (Natural Language Toolkit) para processamento de texto.
-- Faz uso de Layers contendo as dependências do NLTK e configura o caminho para essas layers.
-- A função lambda_handler acessa o bucket S3 de entrada (pasta "processado") e de saída (pasta "estruturados").
-- Organiza e processa os dados extraídos pela função anterior, baixa o arquivo JSON do S3 e salva a versão estruturada no mesmo bucket.
-- Retorna um status code indicando o sucesso ou falha do processo.
+##### Aplica processamento de linguagem natural (NLP) para estruturar os dados extraídos:
+
+- Utiliza NLTK (Natural Language Toolkit) e Regex para refinar o texto.
+
+- Emprega AWS Lambda Layers para carregar as dependências do NLTK.
+
+- Acessa os buckets S3:
+
+  - Lê o JSON processado na pasta `processado/`.
+
+  - Estrutura os dados extraídos pela função anterior e salva na pasta `estruturado/`.
+
+- Retorna um status code indicando sucesso ou falha do processamento.
+
 
 ### Lambda 4 - `LambdaLLM`:
 - 
@@ -122,6 +147,7 @@ Para executar o projeto localmente, você precisará:
 
 ---
 
+
 ## 📦 Deployment
 
 Para implantar a aplicação na AWS:
@@ -139,6 +165,15 @@ saM deploy --guided --profile Nome-de-Usuário
 - Amanda: Implementação do Textract e uso do NLTK para processamento de dados.
 
 - Bernardo: Desenvolvimento e integração do modelo de LLM (Large Language Model).
+
+## 💻 Print da Página
+
+<div align="center">
+  <img src="../sprints-4-5-6-pb-aws-janeiro/assets/PrintPagina.png" alt="Pagina" width="400">
+</div>
+
+
+## 📂 Estruturas de pastas
 
  
 ## 🤝 Autores  
@@ -168,6 +203,7 @@ saM deploy --guided --profile Nome-de-Usuário
     </td>
   </tr>
 </table>
+
 
  
 
