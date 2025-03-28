@@ -41,6 +41,9 @@ Resources:
             Effect: Allow
             Action: 
               - states:StartExecution
+              - states:ListExecutions
+              - states:DescribeExecution
+              - states:GetExecutionHistory
             Resource: !Ref InvoiceProcessorStateMachine
       Environment:
         Variables:
