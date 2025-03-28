@@ -176,59 +176,43 @@ saM deploy --guided --profile Nome-de-Usuário
 ## 📂 Estruturas de pastas
 
 ```plaintext
-sprints-4-5-6-pb-aws-janeiro/
-│── .aws-sam/
-│   ├── build/
-│   ├── cache/
-│   ├── artifacts/
-│── assets/
-│   ├── images/
-│   ├── docs/
-│── dataset/
-│   ├── raw_data/
-│   ├── processed_data/
-│   ├── NFs.zip
-│── lambda_api_gateway/
-│   ├── upload_nf/
-│   │   ├── static/
-│   │   │   ├── css/
-│   │   │   │   ├── styles.css
-│   │   │   ├── js/
-│   │   │   │   ├── script.js
-│   │   ├── templates/
-│   │   │   ├── index.html
-│   │   ├── app.py
-│   │   ├── routes.py
-│   ├── upload_invoice/
-│   │   ├── handlers/
-│   │   ├── utils/
-│   │   ├── upload_invoice.py
-│── lambda_llm/
-│   ├── models/
-│   ├── utils/
-│   ├── app.py
-│   ├── requirements.txt
-│── lambda_nltk/
-│   ├── processors/
-│   ├── utils/
-│   ├── app.py
-│   ├── requirements.txt
-│── lambda_textract/
-│   ├── parsers/
-│   ├── utils/
-│   ├── app.py
-│   ├── requirements.txt
-│── layer/
-│   ├── nltk/
-│   │   ├── NLTK_layer.zip
-│── statemachine/
-│   ├── definitions/
-│   │   ├── invoice_processor.json
-│── .gitignore
-│── README.md
-│── requirements.txt
-│── samconfig.toml
-|── template.yaml
+📦 SPRINTS-4-5-6-PB-AWS-JANEIRO  
+├── 📂 aws-sam  
+│   ├── 📂 build  
+│   │   ├── build.toml  
+├── 📂 assets  
+├── 📂 dataset  
+├── 📂 lambda_api_gateway  
+│   ├── 📂 upload_nf  
+│   │   ├── index.html  
+│   │   ├── script.js  
+│   │   ├── styles.css  
+│   │   ├── __init__.py  
+│   ├── app.py  
+│   ├── requirements.txt  
+│   ├── routes.py  
+│   ├── upload_invoice.py  
+├── 📂 lambda_llm  
+│   ├── app.py  
+│   ├── requirements.txt  
+├── 📂 lambda_nltk  
+│   ├── app.py  
+│   ├── requirements.txt  
+├── 📂 lambda_textract  
+│   ├── app.py  
+│   ├── requirements.txt  
+├── 📂 layer  
+│   ├── NLTK_layer.zip  
+├── 📂 statemachine  
+│   ├── invoice_processor.json  
+├── 📂 venv  
+├── .gitignore  
+├── env.json  
+├── event.json  
+├── README.md  
+├── requirements.txt  
+├── samconfig.toml  
+├── template.yaml  
 
 ```
  
