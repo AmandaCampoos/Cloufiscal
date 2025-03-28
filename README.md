@@ -169,7 +169,7 @@ saM deploy --guided --profile Nome-de-Usuário
 ## 💻 Print da Página
 
 <div align="center">
-  <img src="../sprints-4-5-6-pb-aws-janeiro/assets/PrintPagina.png" alt="Pagina" width="400">
+  <img src="./assets/PrintPagina.png" alt="Pagina" width="400">
 </div>
 
 
