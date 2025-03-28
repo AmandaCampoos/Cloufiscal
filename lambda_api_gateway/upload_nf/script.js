@@ -10,7 +10,7 @@ document.getElementById("fileInput").addEventListener("change", function(event) 
 });
 
 function displayData(data) {
-    const outputDiv = document.getElementById('output');
+    const outputDiv = document.querySelector(".output");
     outputDiv.innerHTML = ''; // Limpa o conteúdo anterior
     
     if (!data.data.nota_corrigida) {
