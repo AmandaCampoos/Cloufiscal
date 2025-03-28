@@ -2,6 +2,7 @@ import json
 import requests
 import os
 import boto3
+import re
 
 #refatorar fuunções depois
 
@@ -10,6 +11,12 @@ GROQ_API_KEY = ""  # Defina essa variável no ambiente
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = "llama-3.3-70b-versatile"
 
+
+def treat_name(archive_name):
+    match = re.search(r'/(.*?)-', archive_name)
+    if match:
+        return match.group(1)
+    return "FunçãoNPegou"
 
 def verificar_forma_pgto(json_response):
     if json_response['forma_pgto'].lower() in ['dinheiro', 'pix']:
@@ -82,6 +89,15 @@ def lambda_handler(event, context):
         # Util para fins de testes locais
         structured_data = event.get("data", event) # Testar ambos os casos
 
+        archive_name = event.get("message", event)
+        json_name = json.dumps(archive_name, indent=2)
+
+        print("Nome do arquivo:", archive_name)
+        print(type(archive_name))
+        
+        treated_name= treat_name(json_name) 
+        print("Nome tratado:", treated_name)
+
         #structured_data = event.get("data", {})  # Dados estruturados da nota fiscal
         #structured_data = event
         print("Dados Estruturados:", json.dumps(structured_data, indent=2))
@@ -113,10 +129,10 @@ def lambda_handler(event, context):
 
         forma_pgto = verificar_forma_pgto(json_response)
         pasta = f"finalizados/{forma_pgto}"
-        nome_arquivo = "nftesteDin.json"
+        #nome_arquivo = "nftesteDin.json"
 
         # Criando o caminho dinâmico
-        output_key = f"{pasta}/{nome_arquivo}"
+        output_key = f"{pasta}/{treated_name}"
 
 
         s3_client.put_object(
