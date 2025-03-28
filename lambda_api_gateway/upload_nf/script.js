@@ -30,7 +30,7 @@ async function uploadFile() {
     try {
         console.log("📤 Enviando arquivo:", file.name);
 
-        const response = await fetch('https://gk52y82w0h.execute-api.us-east-1.amazonaws.com/Prod/api/v1/invoice', {
+        const response = await fetch('https://ejbp0hc13c.execute-api.us-east-1.amazonaws.com/Prod/api/v1/invoice', {
             method: 'POST',
             body: formData,
             headers: { "Accept": "application/json" }
