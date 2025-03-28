@@ -20,40 +20,46 @@ REGEX_PATTERNS = {
     "FORMA_PGTO": r"\b(Pix|Dinheiro|Cartão|Boleto|Crédito|Débito)\b"
 }
 
+def log(message):
+    print(f"📝 {message}")
+
 def extract_field(pattern, text, default="None"):
     """Extrai um campo usando regex e retorna o primeiro valor encontrado ou 'None'. """
     match = re.search(pattern, text, re.IGNORECASE)
     return match.group(0) if match else default
 
 def lambda_handler(event, context):
-    bucket_name = "minhas-notas-fiscais"
+    log("Iniciando processamento da nota fiscal... 📄")
+    
+    bucket_name = "minhas-notas-fiscais-api-a"
     input_prefix = "processado/"
     output_prefix = "estruturado/"
-
-    # ✅ Pegando o nome do arquivo corretamente
+    
     input_key = event.get("file")  
-
+    
     if not input_key:
+        log("⚠️ Nenhum arquivo encontrado no evento!")
         return {"statusCode": 400, "error": "Nenhum arquivo foi encontrado no evento."}
-
-    # 🚨 Verifica se o arquivo está no diretório correto
+    
+    log(f"📂 Arquivo recebido: {input_key}")
+    
     if "processado/" not in input_key:
+        log(f"❌ Arquivo está no local errado: {input_key}")
         return {"statusCode": 400, "error": f"Arquivo processado não encontrado! Esperado em '{input_prefix}', mas veio '{input_key}'."}
-
+    
     output_key = input_key.replace(input_prefix, output_prefix).replace(".json", "-structured.json")
-
+    
     try:
-        # Baixar o arquivo JSON do S3
+        log("📥 Baixando arquivo do S3...")
         obj = s3_client.get_object(Bucket=bucket_name, Key=input_key)
         text_data = json.loads(obj["Body"].read().decode("utf-8"))
-
-        # Concatenar todas as linhas do JSON para formar um texto contínuo
+        
         lines = text_data.get("lines", [])
         raw_text = " ".join(lines)
-
-        # Aplicar regex para extrair informações
+        
+        log("🔍 Extraindo informações da nota fiscal...")
         structured_data = {
-            "nome_emissor": extract_field(r"([\w\s]+) LTDA", raw_text),  # Extraindo nome sem fixar "OGGI"
+            "nome_emissor": extract_field(r"([\w\s]+) LTDA", raw_text),
             "CNPJ_emissor": extract_field(REGEX_PATTERNS["CNPJ"], raw_text),
             "endereco_emissor": extract_field(r"End.:([\w\s,.-]+)", raw_text),
             "CNPJ_CPF_consumidor": extract_field(REGEX_PATTERNS["CPF"], raw_text),
@@ -63,15 +69,16 @@ def lambda_handler(event, context):
             "valor_total": extract_field(REGEX_PATTERNS["VALOR"], raw_text),
             "forma_pgto": extract_field(REGEX_PATTERNS["FORMA_PGTO"], raw_text, "Outros")
         }
-
-        # Salvar JSON estruturado no S3
+        
+        log("📤 Salvando JSON estruturado no S3...")
         s3_client.put_object(
             Bucket=bucket_name,
             Key=output_key,
             Body=json.dumps(structured_data, indent=4),
             ContentType="application/json"
         )
-
+        
+        log("✅ Processamento concluído com sucesso!")
         return {
             "statusCode": 200,
             "message": f"Arquivo processado e salvo em {output_key}",
@@ -79,6 +86,7 @@ def lambda_handler(event, context):
         }
     
     except Exception as e:
+        log(f"❌ Erro ao processar o arquivo: {str(e)}")
         return {
             "statusCode": 500,
             "error": f"Erro ao processar o arquivo: {str(e)}"
