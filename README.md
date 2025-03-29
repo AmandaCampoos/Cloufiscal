@@ -12,16 +12,19 @@ Este projeto implementa um sistema automatizado para processamento de notas fisc
 O principal objetivo é extrair, processar e organizar os dados das notas fiscais enviadas pelos usuários, transformando-os em um formato estruturado para facilitar análises.
 
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![AWS SAM](https://img.shields.io/badge/AWS%20SAM-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
-![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![Amazon AWS API Gateway](https://img.shields.io/badge/AWS%20API%20Gateway-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
-![Amazon AWS S3](https://img.shields.io/badge/AWS%20S3-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
-![Amazon AWS Lambda](https://img.shields.io/badge/AWS%20Lambda-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
-![Amazon AWS Textract](https://img.shields.io/badge/AWS%20Textract-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
-![Boto3](https://img.shields.io/badge/Boto3-4B8BBE?style=for-the-badge&logo=python&logoColor=white)
-![LLM](https://img.shields.io/badge/LLM-Blue?style=for-the-badge)
-![NLTK](https://img.shields.io/badge/NLTK-008000?style=for-the-badge&logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) 
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) 
+![AWS SAM](https://img.shields.io/badge/AWS%20SAM-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white) 
+![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) 
+![Amazon AWS API Gateway](https://img.shields.io/badge/AWS%20API%20Gateway-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) 
+![Amazon AWS S3](https://img.shields.io/badge/AWS%20S3-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) 
+![Amazon AWS Lambda](https://img.shields.io/badge/AWS%20Lambda-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) 
+![Amazon AWS Textract](https://img.shields.io/badge/AWS%20Textract-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) 
+![AWS Step Functions](https://img.shields.io/badge/AWS%20Step%20Functions-FF4F8B?style=for-the-badge&logo=amazonaws&logoColor=white) 
+![Boto3](https://img.shields.io/badge/Boto3-4B8BBE?style=for-the-badge&logo=python&logoColor=white) 
+![LLM](https://img.shields.io/badge/LLM-Blue?style=for-the-badge) 
+![AWS CloudWatch](https://img.shields.io/badge/AWS%20CloudWatch-FF4F8B?style=for-the-badge&logo=amazonaws&logoColor=white) 
+![NLTK](https://img.shields.io/badge/NLTK-008000?style=for-the-badge&logo=python&logoColor=white) 
 
 ---
 
@@ -30,12 +33,12 @@ O principal objetivo é extrair, processar e organizar os dados das notas fiscai
 1. [🚀 Tecnologias Utilizadas](#-tecnologias-utilizadas)
 2. [📝 Requisitos](#-requisitos) 
 3. [🛠️ Arquitetura e Funcionalidades](#-arquitetura-e-funcionalidade)
-3. [🔬 Testes locais](#-testes-locais)
+3. [🛠️ Passos para Execução](#-passos-para-execução)
 4. [📦 Deployment](#-deployment)
 5. [📝 Responsabilidades da equipe](#-responsabilidades-da-equipe)  
 6. [👨‍💻 Autores](#-autores)
 7. [📂 Estrutura de Pastas](#-estrutura-de-pastas)
-8. [💻 Print da Página](#-print-da-pagina)
+8. [💻 Captura da página web](#-captura-da-pagina-web)
 
 ---
 
@@ -101,7 +104,7 @@ Para executar o projeto localmente, você precisará:
 
 ##### 📟 Logs do AWS CloudWatch:
 <div align="center">
-  <img src="./assets/LogsLambdaUpload.png" alt="Pagina" width="550">
+  <img src="./assets/LogsLambdaUpload.png" alt="Pagina" width="700">
 </div>
 
 ### Lambda 2 - `LambdaTextract`:
@@ -148,19 +151,33 @@ Para executar o projeto localmente, você precisará:
 ### Lambda 4 - `LambdaLLM`:
 - 
  -
+## 🛠️ Passos para Execução
 
-## 🔬 Testes Locais
-
-1. **Usando Postman**:
+1. **Clone o repositório:**
+```bash
+git clone https://github.com/Compass-pb-aws-2025-JANEIRO/sprints-4-5-6-pb-aws-janeiro.git
+cd sprints-4-5-6-pb-aws-janeiro
+```
+2. **Construa o projeto com AWS SAM:**
+```bash
+sam build
+```
+3. **Inicie a API localmente:**
+```bash
+sam local start-api
+```
+4. **Para testar o endpoint de upload de notas fiscais:**
+- **Usando o postman:**
 
    - Faça um POST para `/api/v1/invoice` enviando um arquivo como `multipart/form-data`.
 
-2. **Usando AWS SAM**:
+- **Usando o CURL:**
 
-   - Rodar `sam local invoke` para testar funções Lambda individualmente.
-   - Rodar `sam local start-api` para testar a API Gateway localmente.
-
----
+```bash
+curl -X POST "https://seu-endpoint.com/api/v1/invoice" \
+     -H "Content-Type: multipart/form-data" \
+     -F "file=@nota_fiscal.jpg"
+```
 
 
 ## 📦 Deployment
@@ -169,7 +186,7 @@ Para implantar a aplicação na AWS:
 
 ```sh
 sam build
-saM deploy --guided --profile Nome-de-Usuário
+sam deploy --guided --profile Nome-de-Usuário
 
 ```
 
@@ -181,7 +198,7 @@ saM deploy --guided --profile Nome-de-Usuário
 
 - Bernardo: Desenvolvimento e integração do modelo de LLM (Large Language Model).
 
-## 💻 Print da Página
+## 💻 Captura da Página web
 
 <div align="center">
   <img src="./assets/PrintPagina.png" alt="Pagina" width="700">
