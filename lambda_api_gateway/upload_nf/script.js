@@ -27,11 +27,7 @@ function displayData(data) {
         notaDiv.appendChild(p);
     }
     
-    const pagamentoP = document.createElement('p');
-    pagamentoP.innerHTML = `<strong>Forma de Pagamento:</strong> ${data.data.forma_de_pgto || 'Não informado'}`;
-    
     outputDiv.appendChild(notaDiv);
-    outputDiv.appendChild(pagamentoP);
 }
 
 async function uploadFile() {
