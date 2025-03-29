@@ -7,7 +7,7 @@
 </div>
 
 ## 📌 Visão Geral
-Nós da somos da empresa ABR soluções de software e gostaríamos de uma solução dos senhores(as), que fazem parte da empresa terceira "TI SOLUÇÕES INCRÍVEIS". Nosso eCommerce está crescendo e a solução atual não está atendendo mais a alta demanda de acessos e compras que temos.Este projeto implementa um sistema automatizado para processamento de notas fiscais, utilizando serviços da AWS para extrair, processar e estruturar informações de forma eficiente. A arquitetura é baseada em AWS Lambda, API Gateway, S3, Textract, NLTK e Step Functions, garantindo escalabilidade e automação do fluxo de trabalho.
+Este projeto implementa um sistema automatizado para processamento de notas fiscais, utilizando serviços da AWS para extrair, processar e estruturar informações de forma eficiente. A arquitetura é baseada em AWS Lambda, API Gateway, S3, Textract, NLTK e Step Functions, garantindo escalabilidade e automação do fluxo de trabalho.
 
 O principal objetivo é extrair, processar e organizar os dados das notas fiscais enviadas pelos usuários, transformando-os em um formato estruturado para facilitar análises.
 
@@ -101,7 +101,7 @@ Para executar o projeto localmente, você precisará:
 
 ##### 📟 Logs do AWS CloudWatch:
 <div align="center">
-  <img src="./assets/LogsLambdaUpload.png" alt="Pagina" width="450">
+  <img src="./assets/LogsLambdaUpload.png" alt="Pagina" width="550">
 </div>
 
 ### Lambda 2 - `LambdaTextract`:
