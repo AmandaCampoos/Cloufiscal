@@ -7,7 +7,7 @@
 </div>
 
 ## 📌 Visão Geral
-Este projeto implementa um sistema automatizado para processamento de notas fiscais, utilizando serviços da AWS para extrair, processar e estruturar informações de forma eficiente. A arquitetura é baseada em AWS Lambda, API Gateway, S3, Textract, NLTK e Step Functions, garantindo escalabilidade e automação do fluxo de trabalho.
+Nós da somos da empresa ABR soluções de software e gostaríamos de uma solução dos senhores(as), que fazem parte da empresa terceira "TI SOLUÇÕES INCRÍVEIS". Nosso eCommerce está crescendo e a solução atual não está atendendo mais a alta demanda de acessos e compras que temos.Este projeto implementa um sistema automatizado para processamento de notas fiscais, utilizando serviços da AWS para extrair, processar e estruturar informações de forma eficiente. A arquitetura é baseada em AWS Lambda, API Gateway, S3, Textract, NLTK e Step Functions, garantindo escalabilidade e automação do fluxo de trabalho.
 
 O principal objetivo é extrair, processar e organizar os dados das notas fiscais enviadas pelos usuários, transformando-os em um formato estruturado para facilitar análises.
 
@@ -99,6 +99,11 @@ Para executar o projeto localmente, você precisará:
 
 - Inicia o Step Function, que gerencia a execução das próximas etapas do processo.
 
+##### 📟 Logs do AWS CloudWatch:
+<div align="center">
+  <img src="./assets/LogsLambdaUpload.png" alt="Pagina" width="450">
+</div>
+
 ### Lambda 2 - `LambdaTextract`:
 
 ##### Processa a nota fiscal utilizando OCR via Amazon Textract:
@@ -112,6 +117,12 @@ Para executar o projeto localmente, você precisará:
 - Salva o resultado em JSON na pasta `processado/` do S3.
 
 - Ao concluir, aciona a próxima função `LambdaNLTK` para estruturar os dados extraídos.
+
+##### 📟 Logs do AWS CloudWatch:
+<div align="center">
+  <img src="./assets/LogsTextract.png" alt="Pagina" width="450">
+</div>
+
 
 ### Lambda 3 - `LambdaNLTK`:
 
@@ -129,6 +140,10 @@ Para executar o projeto localmente, você precisará:
 
 - Retorna um status code indicando sucesso ou falha do processamento.
 
+##### 📟 Logs do AWS CloudWatch:
+<div align="center">
+  <img src="./assets/LogsNLTK.jpg" alt="Pagina" width="450">
+</div>
 
 ### Lambda 4 - `LambdaLLM`:
 - 
@@ -169,7 +184,7 @@ saM deploy --guided --profile Nome-de-Usuário
 ## 💻 Print da Página
 
 <div align="center">
-  <img src="./assets/PrintPagina.png" alt="Pagina" width="650">
+  <img src="./assets/PrintPagina.png" alt="Pagina" width="700">
 </div>
 
 
@@ -223,16 +238,16 @@ saM deploy --guided --profile Nome-de-Usuário
     <td align="center">
       <img src="assets/AmandaX.png" alt="Amanda Campos" width="120" height="120">
       <br>
-      <a href="https://github.com/AmandaCampoos">Git Hub - Amanda Campos</a>
+      <a href="https://github.com/AmandaCampoos">Git Hub - Amanda Ximenes</a>
       <br>
-      <a href="linkedin.com/in/amanda-ximenes-a02ab8266">Linkedin - Amanda Campos</a>
+      <a href="linkedin.com/in/amanda-ximenes-a02ab8266">Linkedin - Amanda Ximenes</a>
     </td>
     <td align="center">
       <img src="assets/BernardoA.png" alt="Bernardo Alonso" width="120" height="120">
       <br>
       <a href="https://github.com/Bernardo-rar"> Git Hub - Bernardo Alonso</a>
       <br>
-      <a href="https://github.com/Bernardo-rar"> Linkedin - Bernardo Alonso</a>
+      <a href="linkedin.com/in/bernardo-ramos-865b8a248"> Linkedin - Bernardo Alonso</a>
     </td>
     <td align="center">
       <img src="assets/RobertaO.png" alt="Roberta Oliveira" width="120" height="120">
