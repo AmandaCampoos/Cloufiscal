@@ -98,6 +98,12 @@ Para executar o projeto localmente, você precisará:
 
 ## 🛠️ Arquitetura e Funcionalidades
 
+### Sobre o AWS SAM ![AWS SAM](https://img.shields.io/badge/AWS%20SAM-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+
+O AWS SAM(Serverless Application Model) é a ferramenta, open-source e oficial da AWS, que permitiu a progressão rápida do projeto, ela permite subir toda a infraestrutura da aws através de um template.yaml, contendo polices, estrtura do stepfunction, permissions,teste locais entre outros, facilitando o trabalho em equipe.
+
+Para saber mais acesse: https://github.com/aws/aws-sam-cli?tab=readme-ov-file
+
 ### 🔄 Fluxo de Processamento
 
 ####  Lambda 1 - `InvoiceFunction`:
