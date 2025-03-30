@@ -7,6 +7,7 @@
 </div>
 
 ## 📌 Visão Geral
+
 Este projeto implementa um sistema automatizado para processamento de notas fiscais, utilizando serviços da AWS para extrair, processar e estruturar informações de forma eficiente. A arquitetura é baseada em AWS Lambda, API Gateway, S3, Textract, NLTK e Step Functions, garantindo escalabilidade e automação do fluxo de trabalho.
 
 O principal objetivo é extrair, processar e organizar os dados das notas fiscais enviadas pelos usuários, transformando-os em um formato estruturado para facilitar análises.
@@ -99,7 +100,7 @@ Para executar o projeto localmente, você precisará:
 
 ### 🔄 Fluxo de Processamento
 
-###  Lambda 1 - `InvoiceFunction`:
+####  Lambda 1 - `InvoiceFunction`:
 
 ##### Responsável por iniciar o fluxo de processamento e interagir com os serviços AWS:
 
@@ -116,7 +117,7 @@ Para executar o projeto localmente, você precisará:
   <img src="./assets/LogsLambdaUpload.png" alt="Pagina" width="700">
 </div>
 
-### Lambda 2 - `LambdaTextract`:
+#### Lambda 2 - `LambdaTextract`:
 
 ##### Processa a nota fiscal utilizando OCR via Amazon Textract:
 
@@ -136,9 +137,9 @@ Para executar o projeto localmente, você precisará:
 </div>
 
 
-### Lambda 3 - `LambdaNLTK`:
+#### Lambda 3 - `LambdaNLTK`:
 
-#### Aplica processamento de linguagem natural (NLP) para estruturar os dados extraídos:
+##### Aplica processamento de linguagem natural (NLP) para estruturar os dados extraídos:
 
 - Utiliza NLTK (Natural Language Toolkit) e Regex para refinar o texto.
 
@@ -153,6 +154,7 @@ Para executar o projeto localmente, você precisará:
 - Retorna um status code indicando sucesso ou falha do processamento.
 
 #### 📟 Logs do AWS CloudWatch:
+
 <div align="center">
   <img src="./assets/LogsNLTK.jpg" alt="Pagina" width="450">
 </div>
@@ -166,9 +168,12 @@ Para executar o projeto localmente, você precisará:
 - Ve o tipo de pagamento é sobe na pasta correta(seja dinheiro ou outros) dentro da pasta finalizados.
 - Fim do step function, retorna o resultado para a invoice que chamou o step function
 
+#### 📟 Logs do AWS CloudWatch:
 
-- 
- -
+<div align="center">
+  <img src="./assets/LogsLLM.jpg" alt="Pagina" width="750">
+</div>
+
 ## 🛠️ Passos para Execução
 
 1. **Clone o repositório:**
@@ -185,6 +190,7 @@ sam build
 sam local start-api
 ```
 4. **Para testar o endpoint de upload de notas fiscais:**
+
 - **Usando o postman:**
 
    - Faça um POST para `/api/v1/invoice` enviando um arquivo como `multipart/form-data`.
