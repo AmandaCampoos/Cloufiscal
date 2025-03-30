@@ -247,9 +247,9 @@ sam deploy --guided --profile Nome-de-Usuário
 ├── template.yaml  
 
 ```
-## Custos dos Serviços AWS
+## 💰 Custos dos Serviços AWS 
 
-Aqui estão os custos dos serviços AWS utilizados neste projeto:
+Aqui estão os custos dos serviços AWS utilizados neste projeto no periodo de 30 dias de execução do projeto:
 
 | Serviço                                | Custo (USD) |
 |----------------------------------------|-------------|
@@ -269,14 +269,14 @@ Aqui estão os custos dos serviços AWS utilizados neste projeto:
 | Tax                                     | 1.06        |
 | **Total**                               | **5.49**    |
 
-# Como calcular os custos na AWS
+## 🚀 Como calcular os custos na AWS
 
 Para calcular os custos dos serviços AWS utilizados no projeto, siga os passos abaixo:
 
-## 1️⃣ Acesse o AWS CloudShell
+## 🖥️ 1️⃣ Acesse o AWS CloudShell  
 Certifique-se de estar logado na AWS e abra o CloudShell.
 
-## 2️⃣ Execute o comando abaixo
+## 🏗️ 2️⃣ Execute o comando abaixo 
 Copie e cole o seguinte comando no terminal do CloudShell para obter os custos por serviço tabelado em json:
 
 ```sh
@@ -288,7 +288,6 @@ aws ce get-cost-and-usage \
 
 
 ```
-
 
 
 
