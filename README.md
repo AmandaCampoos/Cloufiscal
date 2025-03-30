@@ -211,6 +211,9 @@ curl -X POST "https://seu-endpoint.com/api/v1/invoice" \
      -F "file=@nota_fiscal.jpg"
 ```
 
+- **Utilizando o front disponibilizado**
+  - Utilize alguma extensão(Live Server) e suba a página localmente.
+  - Após isto, basta selecionar uma nota fiscal e selecionar enviar.
 
 ## 📦 Deployment
 
