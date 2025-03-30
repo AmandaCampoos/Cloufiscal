@@ -44,15 +44,23 @@ O principal objetivo é extrair, processar e organizar os dados das notas fiscai
 
 ## 🚀 Tecnologias Utilizadas  
 
-### 🐍 **Linguagem**
+### 💻 **Linguagem**
 
-- Python 3.12  
+#### 🐍 Backend
+
+- Python 3.12 
+
+#### 👨‍💻 Frontend
+
+- HTML 5
+- CSS 3
+- JavaScript CMAScript 5.1.
 
 ### 🛠️ **Frameworks e Bibliotecas**
 
-- AWS SAM - Serverless Application Model
-- Boto3 - SDK da AWS para Python
-- NLTK - Biblioteca para processamento de linguagem natural
+- AWS SAM(v1.136.0) - Serverless Application Model
+- Boto3(v1.37.23) - SDK da AWS para Python
+- NLTK(v3.9.1) - Biblioteca para processamento de linguagem natural
 
 ### ☁️ **Serviços AWS**
 
@@ -65,9 +73,9 @@ O principal objetivo é extrair, processar e organizar os dados das notas fiscai
 
 ### 💻 **Ferramentas de Desenvolvimento**
 
-- Docker - Para execução local da Função Lambda
-- Git e GitHub - Controle de versão
-- Postman - Para testes locais
+- Docker(v27.4) - Para execução local da Função Lambda
+- Git e GitHub(2.49.0) - Controle de versão
+- Postman(v11.27.3) - Para testes locais
 
 ---
 
@@ -75,6 +83,7 @@ O principal objetivo é extrair, processar e organizar os dados das notas fiscai
 Para executar o projeto localmente, você precisará:
 
 - Python 3.12 instalado
+  - Versão 3.13 do python até o presente momento(31/03/2025) gera instabilidades e bugs no funcionamento do código .
 
 - AWS CLI configurado
 
