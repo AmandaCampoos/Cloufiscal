@@ -129,7 +129,7 @@ Para executar o projeto localmente, você precisará:
 
 ### Lambda 3 - `LambdaNLTK`:
 
-##### Aplica processamento de linguagem natural (NLP) para estruturar os dados extraídos:
+#### Aplica processamento de linguagem natural (NLP) para estruturar os dados extraídos:
 
 - Utiliza NLTK (Natural Language Toolkit) e Regex para refinar o texto.
 
@@ -143,12 +143,21 @@ Para executar o projeto localmente, você precisará:
 
 - Retorna um status code indicando sucesso ou falha do processamento.
 
-##### 📟 Logs do AWS CloudWatch:
+#### 📟 Logs do AWS CloudWatch:
 <div align="center">
   <img src="./assets/LogsNLTK.jpg" alt="Pagina" width="450">
 </div>
 
 ### Lambda 4 - `LambdaLLM`:
+
+#### Trata os dados vindos da lambda NLTK:
+
+- Utiliza a api gratis da groq, com o modelo Llama 3.13(versatile), com o limite de 30 requisições por minuto.
+- Corrige campos e retorna um json válido para o retorno da api e para o bucket s3.
+- Ve o tipo de pagamento é sobe na pasta correta(seja dinheiro ou outros) dentro da pasta finalizados.
+- Fim do step function, retorna o resultado para a invoice que chamou o step function
+
+
 - 
  -
 ## 🛠️ Passos para Execução
