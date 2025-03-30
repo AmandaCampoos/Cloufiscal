@@ -247,6 +247,58 @@ sam deploy --guided --profile Nome-de-Usuário
 ├── template.yaml  
 
 ```
+## Custos dos Serviços AWS
+
+Aqui estão os custos dos serviços AWS utilizados neste projeto:
+
+| Serviço                                | Custo (USD) |
+|----------------------------------------|-------------|
+| AWS CloudFormation                     | 0.000000    |
+| AWS CloudShell                          | 0.0000005589 |
+| AWS Config                              | 0.78        |
+| AWS Key Management Service              | 0.0002854267 |
+| AWS Lambda                              | 0.0041201735 |
+| AWS Step Functions                      | 0.5974907736 |
+| AWS X-Ray                               | 0.000000    |
+| Amazon API Gateway                      | 0.0000735   |
+| Amazon Simple Notification Service      | 0.000000    |
+| Amazon Simple Queue Service             | 0.000000    |
+| Amazon Simple Storage Service           | 0.0093366776 |
+| Amazon Textract                         | 3.0415      |
+| Amazon CloudWatch                       | 0.0020337625 |
+| Tax                                     | 1.06        |
+| **Total**                               | **5.49**    |
+
+# Como calcular os custos na AWS
+
+Para calcular os custos dos serviços AWS utilizados no projeto, siga os passos abaixo:
+
+## 1️⃣ Acesse o AWS CloudShell
+Certifique-se de estar logado na AWS e abra o CloudShell.
+
+## 2️⃣ Execute o comando abaixo
+Copie e cole o seguinte comando no terminal do CloudShell para obter os custos por serviço tabelado em json:
+
+```sh
+aws ce get-cost-and-usage \
+    --time-period Start=2025-03-01,End=2025-03-31 \
+    --granularity MONTHLY \
+    --metrics "BlendedCost" \
+    --group-by Type=DIMENSION,Key=SERVICE | jq '.ResultsByTime[].Groups[] | {Service: .Keys[0], Cost: .Metrics.BlendedCost.Amount}'
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
  
 ## 🤝 Autores  
 
